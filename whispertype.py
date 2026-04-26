@@ -142,15 +142,15 @@ def _type_text(text: str):
     except Exception:
         pass
 
-# ── Hotkey handlers (F18 sent by AHK on Win+S) ───────────────────────────────
-def _on_press(e):
+# ── Hotkey handlers (AHK sends Ctrl+Shift+F12 on press, Ctrl+Shift+F11 on release) ──
+def _on_press():
     global _recording, _frames
     if not _recording:
         _recording = True
         _frames = []
         print("  [REC] ...", end="\r", flush=True)
 
-def _on_release(e):
+def _on_release():
     global _recording
     if _recording:
         _recording = False
@@ -165,7 +165,7 @@ def _on_release(e):
                 print("  (nothing heard)           ")
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-print("Ready. Hold Win+S to dictate. Ctrl+C to quit.")
+print("Ready. Hold Right Win+S to dictate. Ctrl+C to quit.")
 print("(Run as administrator if hotkey doesn't respond)\n")
 
 _stream = sd.InputStream(
@@ -174,8 +174,8 @@ _stream = sd.InputStream(
 )
 _stream.start()
 
-keyboard.on_press_key("f18", _on_press)
-keyboard.on_release_key("f18", _on_release)
+keyboard.add_hotkey("ctrl+shift+f12", _on_press, suppress=True)
+keyboard.add_hotkey("ctrl+shift+f11", _on_release, suppress=True)
 
 try:
     keyboard.wait()
