@@ -12,23 +12,25 @@ if errorlevel 1 (
 cd /d "%~dp0"
 
 :: ── Launch AHK hotkey (Win+S -> F18) ─────────────────────────────────────────
-where autohotkey >nul 2>&1
-if not errorlevel 1 (
-    start "" autohotkey "%~dp0whispertype.ahk"
-) else (
-    for %%P in (
-        "C:\Program Files\AutoHotkey\AutoHotkey.exe"
-        "C:\Program Files\AutoHotkey\v1.1\AutoHotkey.exe"
-        "C:\Program Files (x86)\AutoHotkey\AutoHotkey.exe"
-    ) do (
-        if exist %%P (
-            start "" %%P "%~dp0whispertype.ahk"
-            goto :ahk_done
-        )
+set AHK_EXE=
+for %%P in (
+    "C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe"
+    "C:\Program Files\AutoHotkey\v2\AutoHotkey.exe"
+    "C:\Program Files\AutoHotkey\AutoHotkey64.exe"
+    "C:\Program Files\AutoHotkey\AutoHotkey.exe"
+    "C:\Program Files\AutoHotkey\v1.1\AutoHotkey.exe"
+    "C:\Program Files (x86)\AutoHotkey\AutoHotkey.exe"
+) do (
+    if exist %%P (
+        set AHK_EXE=%%P
+        goto :found_ahk
     )
-    echo [WARN] AutoHotkey not found. Win+S hotkey will not work.
-    echo        Install from https://www.autohotkey.com
 )
+echo [WARN] AutoHotkey not found. Win+S hotkey will not work.
+echo        Install from https://www.autohotkey.com
+goto :ahk_done
+:found_ahk
+start "" %AHK_EXE% "%~dp0whispertype.ahk"
 :ahk_done
 
 :: ── Run WhisperType ───────────────────────────────────────────────────────────

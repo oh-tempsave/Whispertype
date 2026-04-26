@@ -1,2 +1,2 @@
-; WhisperType — Win+S sends F18, caught by whispertype.py
-#s::Send, {F18}
+#Requires AutoHotkey v2.0
+#s::Send("{F18}")
